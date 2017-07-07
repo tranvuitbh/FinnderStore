@@ -1,2 +1,0 @@
-# FinnderStore
-Project HUTECH University

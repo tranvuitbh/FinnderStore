@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageViewCover"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cover" />
+    <!-- Hành động dành cho cửa hàng-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF"
+        android:orientation="vertical"
+        android:paddingBottom="6dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="6dp">
+
+            <TextView
+                android:id="@+id/textViewSaveThis"
+                style="@style/TextAction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/state_bookmark_click"
+                android:text="Save this" />
+
+            <TextView
+                android:id="@+id/textViewRateIt"
+                style="@style/TextAction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/state_rate_click"
+                android:text="Rate it" />
+
+            <TextView
+                android:id="@+id/textViewComment"
+                style="@style/TextAction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_detail_pencil"
+                android:text="Comment" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="#b6b6b6" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="6dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NOW OPEN"
+                    android:textColor="@color/googleGreen"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/open_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/status"
+                    android:paddingTop="4dp"
+                    android:text="00:00 AM - 11:00 PM" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <!-- Thông tin chi tiết cửa hàng -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorWhite">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="110dp" />
+
+        <RelativeLayout
+            android:id="@+id/info_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/detail_shape_gradient"
+            android:minHeight="100dp"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_all_about" />
+
+            <TextView
+                android:id="@+id/textViewNameSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="Circle K"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textViewAddressSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textViewNameSave"
+                android:layout_below="@id/textViewNameSave"
+                android:paddingTop="4dp"
+                android:text="227 Nguyễn Văn Cừ, phường 13, quận 5" />
+
+            <TextView
+                android:id="@+id/textViewSite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textViewNameSave"
+                android:layout_below="@id/textViewAddressSave"
+                android:paddingTop="4dp"
+                android:text="ministop.com" />
+
+            <TextView
+                android:id="@+id/textViewType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textViewNameSave"
+                android:layout_below="@id/textViewSite"
+                android:paddingTop="4dp"
+                android:text="Convenience store" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:layout_below="@id/info_content"
+            android:background="#b6b6b6" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:padding="3dp"
+        android:text="Reviews"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:layout_below="@id/info_content"
+        android:background="#b6b6b6" />
+
+    <ListView
+        android:id="@+id/listViewReview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>

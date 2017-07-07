@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name"></string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="your_places">Your Places</string>
+    <string name="list_store">3 Lists</string>
+    <string name="general">General</string>
+    <string name="personal">Personal</string>
+    <string name="about">About</string>
+    <!--Manage User-->
+    <string name="manage_user_email">Email</string>
+    <string name="manage_user_name">Admin</string>
+</resources>

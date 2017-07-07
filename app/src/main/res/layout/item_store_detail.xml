@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@color/colorWhite">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <RelativeLayout
+        android:id="@+id/info_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/detail_shape_gradient"
+        android:minHeight="130dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_all_about" />
+
+        <TextView
+            android:id="@+id/textViewNameSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="Circle K"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textViewAddressSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/textViewNameSave"
+            android:layout_below="@id/textViewNameSave"
+            android:paddingTop="4dp"
+            android:text="227 Nguyễn Văn Cừ, phường 13, quận 5" />
+
+        <TextView
+            android:id="@+id/textViewSite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/textViewNameSave"
+            android:layout_below="@id/textViewAddressSave"
+            android:paddingTop="4dp"
+            android:text="ministop.com" />
+
+        <TextView
+            android:id="@+id/textViewType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/textViewNameSave"
+            android:layout_below="@id/textViewSite"
+            android:paddingTop="4dp"
+            android:text="Convenience store" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:layout_below="@id/info_content"
+        android:background="#b6b6b6" />
+
+</RelativeLayout>

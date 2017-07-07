@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:background="@color/colorTablayout"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="16dp">
+
+    <ImageView
+        android:id="@+id/imageViewNavAvatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/textViewNavName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/manage_user_name"
+        android:textColor="@color/colorText" />
+
+    <TextView
+        android:id="@+id/textViewNavEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manage_user_email"
+        android:textColor="@color/colorText" />
+
+    <Button
+        android:id="@+id/buttonNavLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@color/colorButton"
+        android:text="Log Out"
+        android:textAllCaps="false"
+        android:textColor="@color/colorText"
+        android:textSize="12sp" />
+
+</LinearLayout>

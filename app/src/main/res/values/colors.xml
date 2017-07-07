@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorTablayout">#26A69A</color>
+    <color name="colorTab">#80CBC4</color>
+    <color name="colorButton">#00897B</color>
+    <color name="colorCard">#388E3C</color>
+    <color name="colorText">#ffffff</color>
+    <color name="colorYouTubeDark">#5B0E0C</color>
+    <color name="colorPrimaryLight">#506A9D</color>
+    <color name="colorHintText">#B71C1C</color>
+    <color name="googleRed">#db3236</color>
+    <color name="googleGreen">#3cba54</color>
+    <color name="googleBlue">#4885ed</color>
+    <color name="googleYellow">#f4c20d</color>
+    <color name="colorGrey">#9E9E9E</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTabText">#1F1F1F</color>
+    <color name="material_green_50">#E8F5E9</color>
+    <color name="material_green_500">#4CAF50</color>
+    <color name="material_green_700">#388E3C</color>
+    <color name="material_green_a200">#69F0AE</color>
+    <color name="material_lime_a700">#AEEA00</color>
+    <color name="material_purple_a700">#AA00FF</color>
+</resources>

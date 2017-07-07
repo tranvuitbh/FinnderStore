@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivCoverImage"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="center"
+        android:src="@drawable/cover_profile" />
+
+    <ImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="88dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_uber" />
+
+    <TextView
+        android:id="@+id/textViewNameSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="112dp"
+        android:layout_toEndOf="@id/imageViewAvatar"
+        android:layout_toRightOf="@id/imageViewAvatar"
+        android:text="Annonymous"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="136dp"
+        android:layout_toEndOf="@id/imageViewAvatar"
+        android:layout_toRightOf="@id/imageViewAvatar"
+        android:text="\@annonymous"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/buttonSignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="122dp"
+        android:alpha="0.75"
+        android:background="@color/colorButton"
+        android:text="Sign Out"
+        android:textSize="10sp" />
+
+    <ScrollView
+        android:id="@+id/listCreated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewAvatar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/your_places"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewStore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/list_store" />
+            <!--Your Store Save-->
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardViewListSaved"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_below="@+id/textViewStore"
+                android:layout_margin="20dp"
+                app:cardBackgroundColor="@color/colorWhite"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="15dp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="serif"
+                    android:text="My Save Places"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardViewListFavorited"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                app:cardBackgroundColor="@color/colorWhite"
+                app:cardCornerRadius="5dp"
+                android:layout_below="@+id/textViewStore"
+                android:layout_margin="20dp"
+                android:layout_toRightOf="@+id/cardViewListSaved"
+                app:cardElevation="15dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="serif"
+                    android:text="My Favourites"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

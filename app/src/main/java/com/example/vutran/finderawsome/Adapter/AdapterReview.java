@@ -52,7 +52,7 @@ public class AdapterReview extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
             holder.imageViewAvatar = (ImageView) convertView.findViewById(R.id.imageViewAvatar);
-            holder.textViewComment = (TextView) convertView.findViewById(R.id.textViewComment);
+            holder.textViewComment = (TextView) convertView.findViewById(R.id.textViewDirection);
             holder.textViewName = (TextView) convertView.findViewById(R.id.textViewNameSave);
             holder.textViewStar = (TextView) convertView.findViewById(R.id.textViewStar);
             convertView.setTag(holder);

@@ -35,23 +35,23 @@
                 android:drawableTop="@drawable/state_bookmark_click"
                 android:text="Save this" />
 
-            <TextView
-                android:id="@+id/textViewRateIt"
-                style="@style/TextAction"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/state_rate_click"
-                android:text="Rate it" />
+            <!--<TextView-->
+                <!--android:id="@+id/textViewRateIt"-->
+                <!--style="@style/TextAction"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:drawableTop="@drawable/state_rate_click"-->
+                <!--android:text="Rate it" />-->
 
             <TextView
-                android:id="@+id/textViewComment"
+                android:id="@+id/textViewDirection"
                 style="@style/TextAction"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_detail_pencil"
-                android:text="Comment" />
+                android:drawableTop="@drawable/ic_directions_black_24dp"
+                android:text="Direction" />
 
         </LinearLayout>
 
@@ -81,13 +81,13 @@
                     android:textColor="@color/googleGreen"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/open_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/status"
-                    android:paddingTop="4dp"
-                    android:text="00:00 AM - 11:00 PM" />
+                <!--<TextView-->
+                    <!--android:id="@+id/open_time"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/status"-->
+                    <!--android:paddingTop="4dp"-->
+                    <!--android:text="00:00 AM - 11:00 PM" />-->
             </LinearLayout>
 
         </RelativeLayout>

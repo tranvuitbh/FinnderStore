@@ -18,7 +18,8 @@
         android:background="@color/colorButton"
         android:text="Search Around Here"
         android:textColor="@color/colorText"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/buttonDirection"
@@ -27,12 +28,45 @@
         android:layout_alignBottom="@+id/map"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
+        android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/buttonNearBy"
         android:background="@color/colorButton"
         android:text="Direction"
-        android:visibility="invisible"
         android:textColor="@color/colorText"
+        android:textSize="10sp"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/buttonChangeMyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="30dp"
-        android:textSize="10sp" />
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/buttonNearBy"
+        android:background="@color/colorButton"
+        android:text="Change Location"
+        android:textColor="@color/colorText"
+        android:textSize="10sp"
+        android:visibility="gone" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/map"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_toLeftOf="@+id/buttonNearBy" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </WebView>
+
 
 </RelativeLayout>

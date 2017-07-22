@@ -18,9 +18,11 @@ import com.example.vutran.finderawsome.Adapter.AdapterReview;
 import com.example.vutran.finderawsome.Database.DBAdapterStore;
 import com.example.vutran.finderawsome.Database.DBModelStore;
 import com.example.vutran.finderawsome.Database.DatabaseManager;
+import com.example.vutran.finderawsome.MainActivity;
 import com.example.vutran.finderawsome.Model.ModelReview;
 import com.example.vutran.finderawsome.Model.ModelStore;
 import com.example.vutran.finderawsome.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,7 +47,7 @@ import okhttp3.Response;
 
 public class DetailStoreActivity extends AppCompatActivity {
 
-    private TextView textViewAddress, textViewSite, textViewName, textViewSaveThis;
+    private TextView textViewAddress, textViewSite, textViewName, textViewSaveThis, textViewDirection;
     private ImageView imageViewCover;
     private ListView listViewReviews;
     private ArrayList<ModelReview> arrayReview;
@@ -55,6 +57,9 @@ public class DetailStoreActivity extends AppCompatActivity {
     private DBModelStore store;
     private DBAdapterStore adapter;
     private FirebaseAuth mFirebaseAuth;
+    private LatLng latLngStore;
+    public static final String LAT_LNG_DETAIL = "";
+    public static final String BUNDLE_DETAIL = "bundle null";
 
     public DetailStoreActivity() {
     }
@@ -80,6 +85,16 @@ public class DetailStoreActivity extends AppCompatActivity {
                 savedStore();
             }
         });
+        textViewDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailStoreActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(LAT_LNG_DETAIL, latLngStore);
+                intent.putExtra(BUNDLE_DETAIL,bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     public String getIdUser() {
@@ -97,7 +112,7 @@ public class DetailStoreActivity extends AppCompatActivity {
         Bundle bundle = intent.getBundleExtra(ListStoreFragment.BUNDLE);
         String idPlace = bundle.getString(ListStoreFragment.ID);
         database = new DatabaseManager(this);
-        database.updateSaved(idPlace,getIdUser());
+        database.updateSaved(idPlace, getIdUser());
         Toast.makeText(DetailStoreActivity.this, "Saved this place", Toast.LENGTH_SHORT).show();
     }
 
@@ -108,6 +123,7 @@ public class DetailStoreActivity extends AppCompatActivity {
         imageViewCover = (ImageView) findViewById(R.id.imageViewCover);
         listViewReviews = (ListView) findViewById(R.id.listViewReview);
         textViewSaveThis = (TextView) findViewById(R.id.textViewSaveThis);
+        textViewDirection = (TextView) findViewById(R.id.textViewDirection);
     }
 
     private ModelStore createStore() {
@@ -169,6 +185,13 @@ public class DetailStoreActivity extends AppCompatActivity {
                 String site = objectResult.optString("website");
                 String name = objectResult.optString("name");
                 String id = objectResult.optString("place_id");
+                JSONObject geometry = objectResult.getJSONObject("geometry");
+                JSONObject location = geometry.getJSONObject("location");
+
+                double latStore = location.getDouble("lat");
+                double lngStore = location.getDouble("lng");
+                latLngStore = new LatLng(latStore, lngStore);
+
                 textViewAddress.setText(address.toString());
                 textViewSite.setText(site.toString());
                 textViewName.setText(name.toString());

@@ -1,5 +1,6 @@
 package com.example.vutran.finderawsome.Store;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -22,9 +23,11 @@ import android.widget.Toast;
 import com.example.vutran.finderawsome.Adapter.AdapterStore;
 import com.example.vutran.finderawsome.Model.ModelStore;
 import com.example.vutran.finderawsome.R;
-
+import com.example.vutran.finderawsome.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -33,6 +36,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by VuTran on 5/25/2017.
@@ -50,7 +57,7 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
 
     private LocationManager mLocationManager;
     private String provider;
-
+    private Location mLocation;
     String urlGetData = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.813186,106.692180&radius=1800&types=convenience_store&sensor=true&key=AIzaSyAKs8S1YN0HEbaY34at6sYh4nDDywkge2s";
     public static final String ID = "ID address store";
     public static final String BUNDLE = "bundle";
@@ -68,12 +75,13 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = mLocationManager.getBestProvider(criteria, false);
-        Location location = mLocationManager.getLastKnownLocation(provider);
-        if (location != null) {
-            new getDataByAsync().execute(String.valueOf(sbMethod(location)));
+        Location mLocation = mLocationManager.getLastKnownLocation(provider);
+        if (mLocation != null) {
+            new getDataByAsync().execute(String.valueOf(sbMethod(mLocation)));
         } else {
             Toast.makeText(getContext(), "Location Null", Toast.LENGTH_SHORT).show();
         }
+
         /**
          * Click vào từng item
          * Đổ dữ liệu vào bundle rồi chuyển bên Detail
@@ -91,6 +99,61 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
         });
         return view;
 
+    }
+//
+//    private String distance(LatLng destination) {
+//       // LatLng origin = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+//        Location mLocation = mLocationManager.getLastKnownLocation(provider);
+//        LatLng latLngOrgin = new LatLng(mLocation.getLatitude(),mLocation.getLongitude());
+//        String urlRequest = getDirectionsUrl(latLngOrgin, destination);
+//        try {
+//            OkHttpClient client = new OkHttpClient();
+//            Request request = new Request.Builder().url(urlRequest).build();
+//            Response response = null;
+//            try {
+//                response = client.newCall(request).execute();
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+//            String jsonData = response.body().string();
+//            JSONObject object = new JSONObject(jsonData);
+//            JSONArray arrayRoutes = object.getJSONArray("routes");
+//            JSONObject objectRoute = arrayRoutes.getJSONObject(0);
+//            JSONArray arrayLegs = objectRoute.getJSONArray("legs");
+//            JSONObject objectLeg = arrayLegs.getJSONObject(0);
+//            JSONObject objectDistance = objectLeg.getJSONObject("distance");
+//            String distance = objectDistance.getString("text");
+//            return distance;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        return url;
     }
 
     /**
@@ -120,9 +183,10 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + latitude + "," + longtitude);
-        sb.append("&radius=1000");
+        sb.append("&ranky=distance&radius=1000");
         sb.append("&types=" + "convenience_store");
         sb.append("&sensor=true");
+
 
         sb.append("&key=AIzaSyAKs8S1YN0HEbaY34at6sYh4nDDywkge2s");
 
@@ -168,6 +232,11 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
 
                 for (int i = 0; i < ArrayResults.length(); i++) {
                     JSONObject objectResult = ArrayResults.getJSONObject(i);
+//                    JSONObject objectGeo = objectResult.getJSONObject("geometry");
+//                    JSONObject objectLocation = objectGeo.getJSONObject("location");
+//                    double lat = objectLocation.getDouble("lat");
+//                    double lng = objectLocation.getDouble("lng");
+//                    LatLng latLng = new LatLng(lat,lng);
                     String name = objectResult.getString("name");
                     String address = objectResult.getString("vicinity");
                     String id = objectResult.getString("place_id");
@@ -178,6 +247,7 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
                         JSONObject objectPhoto = arrayPhotos.getJSONObject(0);
                         idimage = objectPhoto.getString("photo_reference");
                     }
+
                     arrayStore.add(new ModelStore(name, address, id, idimage));
                 }
                 adapter.notifyDataSetChanged();
@@ -186,5 +256,6 @@ public class ListStoreFragment extends Fragment implements View.OnClickListener 
             }
         }
     }
+
 
 }

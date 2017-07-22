@@ -1,8 +1,10 @@
 package com.example.vutran.finderawsome;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -14,7 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +29,11 @@ import com.example.vutran.finderawsome.Direction.DirectionFinderListener;
 import com.example.vutran.finderawsome.Direction.Route;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -61,6 +71,10 @@ import java.util.List;
 
 import com.example.vutran.finderawsome.Direction.DirectionsJSONParser;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.vutran.finderawsome.Store.DetailStoreActivity.BUNDLE_DETAIL;
+import static com.example.vutran.finderawsome.Store.DetailStoreActivity.LAT_LNG_DETAIL;
+
 /**
  * Created by VuTran on 5/25/2017.
  */
@@ -78,11 +92,17 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
     private Marker mCurrLocationMarker, mMarkerStore;
     private boolean firstRun = true;
     private GoogleApiClient client;
-    private Button buttonNearBy, buttonDirection;
+    private Button buttonNearBy, buttonDirection, buttonChangeMyLocation;
     private ArrayList<LatLng> markerPoints;
     private ProgressDialog progressDialog;
     private LatLng positionStoreSelected;
     private ArrayList<Polyline> polylines = new ArrayList<>();
+    private LocationManager mLocationManager;
+    private String provider;
+    private Location location;
+    private WebView webView;
+    private Spinner spinner;
+    private final static int PLACE_PICKER_REQUEST = 1;
 
     @Nullable
     @Override
@@ -92,10 +112,14 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
 
         buttonNearBy = (Button) view.findViewById(R.id.buttonNearBy);
         buttonDirection = (Button) view.findViewById(R.id.buttonDirection);
+        buttonChangeMyLocation = (Button) view.findViewById(R.id.buttonChangeMyLocation);
 
         buttonNearBy.setOnClickListener(this);
         buttonDirection.setOnClickListener(this);
 
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+
+        searchByRadius();
         mapView.onCreate(savedInstanceState);
 
         mapView.onResume(); // get map immediately
@@ -104,8 +128,100 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
 
         client = new GoogleApiClient.Builder(getContext()).addApi(AppIndex.API).build();
 
+        getDirectionFromDetailStore();
+
         return view;
     }
+
+    public LatLng getCurrentLocation() {
+
+        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        provider = mLocationManager.getBestProvider(criteria, false);
+        Location mLocation = mLocationManager.getLastKnownLocation(provider);
+        if (mLocation != null) {
+            double latitudeStore = mLocation.getLatitude();
+            double longitudeStore = mLocation.getLongitude();
+            LatLng currentLocation = new LatLng(latitudeStore, longitudeStore);
+            return currentLocation;
+        }
+        return null;
+    }
+
+    private void searchByRadius() {
+
+        final ArrayList<String> arrayList = new ArrayList<String>();
+        arrayList.add("1 KM");
+        arrayList.add("2 KM");
+        arrayList.add("3 KM");
+        arrayList.add("4 KM");
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, arrayList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 1:
+                        position = 1;
+                        changeRadius(1000,15);
+                        break;
+                    case 2:
+                        position = 2;
+                        changeRadius(2000,14);
+                        break;
+                    case 3:
+                        position = 3;
+                        changeRadius(3000,14);
+                        break;
+                    case 4:
+                        position = 4;
+                        changeRadius(4000,13);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void changeRadius(int radius,int zoom) {
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+            double lat = getCurrentLocation().latitude;
+            double lng = getCurrentLocation().longitude;
+            Location location = new Location(LocationManager.GPS_PROVIDER);
+            location.setLatitude(lat);
+            location.setLongitude(lng);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(getCurrentLocation()));
+            mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
+            //query places with current location
+            StringBuilder sbValue = new StringBuilder(sbMethod(location, radius));
+            PlacesTask placesTask = new PlacesTask();
+            placesTask.execute(sbValue.toString());
+        }
+    }
+
+
+    public void getDirectionFromDetailStore() {
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra(BUNDLE_DETAIL)) {
+            Bundle bundle = intent.getBundleExtra(BUNDLE_DETAIL);
+            LatLng destination = bundle.getParcelable(LAT_LNG_DETAIL);
+            for (Polyline line : polylines) {
+                line.remove();
+            }
+            polylines.clear();
+            String url = getDirectionsUrl(getCurrentLocation(), destination);
+            DownloadTask downloadTask = new DownloadTask();
+            downloadTask.execute(url);
+        }
+    }
+
 
     /**
      * Kiểm tra xem mGoogleApiClient != null
@@ -147,6 +263,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
                 return false;
             }
         });
+
     }
 
     /**
@@ -156,14 +273,14 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
      * @param currentLocation
      * @return
      */
-    public StringBuilder sbMethod(Location currentLocation) {
+    public StringBuilder sbMethod(Location currentLocation, int radius) {
         //current location
         double mLatitude = currentLocation.getLatitude();
         double mLongitude = currentLocation.getLongitude();
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
-        sb.append("&radius=1500");
+        sb.append("&radius=" + radius);
         sb.append("&types=" + "convenience_store");
         sb.append("&sensor=true");
 
@@ -225,8 +342,10 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         //query places with current location
-        StringBuilder sbValue = new StringBuilder(sbMethod(location));
+        StringBuilder sbValue = new StringBuilder(sbMethod(location, 1000));
+
         PlacesTask placesTask = new PlacesTask();
+
         placesTask.execute(sbValue.toString());
 
         if (mGoogleApiClient != null) {
@@ -236,6 +355,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
 
     @Override
     public void onClick(View v) {
+
         if (v == buttonNearBy) {
             mapView.getMapAsync(this);
         }
@@ -248,6 +368,32 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
             String url = getDirectionsUrl(currentLocation, positionStoreSelected);
             DownloadTask downloadTask = new DownloadTask();
             downloadTask.execute(url);
+        }
+        if (v == buttonChangeMyLocation) {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            try {
+                Intent intent = builder.build(getActivity());
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getContext(), data);
+                if (place.getAttributions() == null) {
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    webView.loadData(place.getAttributions().toString(), "text/html; charset=utf-8", "UFT-8");
+                }
+            }
         }
     }
 
@@ -629,6 +775,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Direc
             parserTask.execute(result);
         }
     }
-    /***************************************************************/
+/***************************************************************/
 
 }

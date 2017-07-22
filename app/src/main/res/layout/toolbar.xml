@@ -7,21 +7,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorTablayout"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <!--<android.support.v7.widget.SearchView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/colorTablayout">-->
-
-        <!--</android.support.v7.widget.SearchView>-->
+            <TextView
+                android:layout_width="323dp"
+                android:layout_height="wrap_content"
+                android:text="Convenience Stores Finder"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#ffff"
+                android:textSize="18dp"
+                android:textStyle="italic" />
+        </android.support.v7.widget.Toolbar>
     </LinearLayout>
 
 </android.support.design.widget.AppBarLayout>

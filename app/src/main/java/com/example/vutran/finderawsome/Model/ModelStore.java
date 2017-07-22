@@ -12,6 +12,19 @@ public class ModelStore {
     private String Site;
     private String Saved;
     private String IdUser;
+    private String Distance;
+
+
+    public ModelStore(String name, String address, String id, String idImage, String site, String saved, String idUser, String distance) {
+        Name = name;
+        Address = address;
+        Id = id;
+        IdImage = idImage;
+        Site = site;
+        Saved = saved;
+        IdUser = idUser;
+        Distance = distance;
+    }
 
     public ModelStore() {
     }
@@ -39,6 +52,7 @@ public class ModelStore {
         Id = id;
         IdImage = idImage;
     }
+
 
     public ModelStore(String name, String address) {
         Name = name;

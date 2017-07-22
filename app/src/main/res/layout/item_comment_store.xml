@@ -32,7 +32,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textViewComment"
+            android:id="@+id/textViewDirection"
             android:layout_width="287dp"
             android:layout_height="wrap_content"
             android:autoLink="all"

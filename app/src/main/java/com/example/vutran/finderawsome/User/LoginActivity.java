@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mfirebaseAuth;
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,9 +84,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewRegister = (TextView) findViewById(R.id.textViewRegister);
-    //    buttonJoinNow = (Button) findViewById(R.id.buttonJoinNow);
+        //    buttonJoinNow = (Button) findViewById(R.id.buttonJoinNow);
         signInButton = (SignInButton) findViewById(R.id.signInButton);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarLogin);
     }
 
     @Override
@@ -108,12 +111,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
+
     // Đăng nhập bằng Google
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, REQ_CODE);
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,17 +137,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        progressBar.setVisibility(View.VISIBLE);
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mfirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progressBar.setVisibility(View.GONE);
                             // Sign in success, update UI with the signed-in user's information
 //                            FirebaseUser user = mfirebaseAuth.getCurrentUser();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            Toast.makeText(LoginActivity.this, "LogIn With Google Success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Login Google Successful", Toast.LENGTH_SHORT).show();
                         } else {
+                            progressBar.setVisibility(View.GONE);
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -156,7 +164,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void Login() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        progressBar.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please enter your email and password", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -164,10 +174,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Successfully to login", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Success to login", Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_SHORT).show();
                 }
             }

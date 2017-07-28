@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button buttonRegister;
     private TextView textViewLogin;
     private FirebaseAuth firebaseAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextPassword    = (EditText) findViewById(R.id.editTextPassword);
         buttonRegister      = (Button) findViewById(R.id.buttonRegister);
         textViewLogin       = (TextView) findViewById(R.id.textViewLogin);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarRegister);
     }
     
     @Override
@@ -61,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void registerUser() {
         String email    = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        progressBar.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(email)|| TextUtils.isEmpty(password)){
             Toast.makeText(RegisterActivity.this, "Please enter email or password", Toast.LENGTH_SHORT).show();
             return;
@@ -70,11 +74,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(RegisterActivity.this, "Successfully register", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 }
                 else{
-                    Toast.makeText(RegisterActivity.this, "Fail to register", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, "Failure to Register", Toast.LENGTH_SHORT).show();
                 }
             }
         });

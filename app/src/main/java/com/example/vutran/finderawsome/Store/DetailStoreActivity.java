@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,10 +20,13 @@ import com.example.vutran.finderawsome.Database.DatabaseManager;
 import com.example.vutran.finderawsome.MainActivity;
 import com.example.vutran.finderawsome.Model.ModelReview;
 import com.example.vutran.finderawsome.Model.ModelStore;
+import com.example.vutran.finderawsome.Firebase.Store;
 import com.example.vutran.finderawsome.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,7 +37,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -60,6 +61,7 @@ public class DetailStoreActivity extends AppCompatActivity {
     private LatLng latLngStore;
     public static final String LAT_LNG_DETAIL = "";
     public static final String BUNDLE_DETAIL = "bundle null";
+    private DatabaseReference mDatabaseReference;
 
     public DetailStoreActivity() {
     }
@@ -83,6 +85,7 @@ public class DetailStoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savedStore();
+                saveToFirebase();
             }
         });
         textViewDirection.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +94,7 @@ public class DetailStoreActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailStoreActivity.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(LAT_LNG_DETAIL, latLngStore);
-                intent.putExtra(BUNDLE_DETAIL,bundle);
+                intent.putExtra(BUNDLE_DETAIL, bundle);
                 startActivity(intent);
             }
         });
@@ -114,6 +117,19 @@ public class DetailStoreActivity extends AppCompatActivity {
         database = new DatabaseManager(this);
         database.updateSaved(idPlace, getIdUser());
         Toast.makeText(DetailStoreActivity.this, "Saved this place", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveToFirebase() {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra(ListStoreFragment.BUNDLE);
+        String idPlace = bundle.getString(ListStoreFragment.ID);
+
+        String name = textViewName.getText().toString();
+        String address = textViewAddress.getText().toString();
+
+        Store store = new Store(name, address,idPlace);
+        mDatabaseReference.child(getIdUser()).child("Favorite Places").child(idPlace).setValue(store);
     }
 
     private void init() {
@@ -172,8 +188,6 @@ public class DetailStoreActivity extends AppCompatActivity {
 
         /**
          * Đọc JSON
-         *
-         * @param s
          */
         @Override
         protected void onPostExecute(String s) {
@@ -234,7 +248,6 @@ public class DetailStoreActivity extends AppCompatActivity {
         return urlRequestPhoto;
 
     }
-
     /**
      * Return Bitmap
      * Hàm trả về hình ảnh và đã set vào imageview

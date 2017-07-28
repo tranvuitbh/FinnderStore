@@ -23,6 +23,7 @@ import com.example.vutran.finderawsome.Store.ListStoreFragment;
 import com.example.vutran.finderawsome.User.FavouriteFragment;
 import com.example.vutran.finderawsome.User.LoginActivity;
 import com.example.vutran.finderawsome.User.ManageUserActivity;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

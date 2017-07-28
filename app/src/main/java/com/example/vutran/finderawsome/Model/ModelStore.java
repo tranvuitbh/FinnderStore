@@ -5,14 +5,14 @@ package com.example.vutran.finderawsome.Model;
  */
 
 public class ModelStore {
-    private String Name;
-    private String Address;
-    private String Id;
-    private String IdImage;
-    private String Site;
-    private String Saved;
-    private String IdUser;
-    private String Distance;
+    public String Name;
+    public String Address;
+    public String Id;
+    public String IdImage;
+    public String Site;
+    public String Saved;
+    public String IdUser;
+    public String Distance;
 
 
     public ModelStore(String name, String address, String id, String idImage, String site, String saved, String idUser, String distance) {
@@ -64,6 +64,7 @@ public class ModelStore {
         Address = address;
         Id = id;
     }
+
 
     public String getIdUser() {
         return IdUser;
